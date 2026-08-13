@@ -8,13 +8,13 @@ DSA Pattern Vault allows you to add problems, organize them by Topics and Patter
 
 ## 🌐 Live Application
 
-**Frontend:**
+**Frontend:**  
 https://dsa-vault-gamma.vercel.app/
 
-**Backend:**
+**Backend:**  
 https://dsa-vault-c7cd.onrender.com/
 
-**Health Check:**
+**Health Check:**  
 https://dsa-vault-c7cd.onrender.com/api/health
 
 ---
@@ -27,7 +27,10 @@ https://dsa-vault-c7cd.onrender.com/api/health
 - Edit existing problems
 - Delete problems
 - Search problems
-- Filter by topic, pattern, difficulty and status
+- Filter by topic
+- Filter by pattern
+- Filter by difficulty
+- Filter by solving status
 - Store solution code
 - Track solved problems
 
@@ -51,15 +54,15 @@ Trees
 ├── DFS
 ├── BFS
 └── Binary Search Tree
+```
 
----
-Topics and patterns can be created while adding problems instead of depending on a fixed list.
+Topics and patterns can be created while adding problems instead of depending on a fixed predefined list.
 
 ### 🔄 Revision Tracking
 
-The application helps keep track of problems that need revision.
+The application helps track problems that need revision.
 
-You can use it to maintain a personal DSA revision workflow instead of manually tracking problems in spreadsheets or notes.
+This allows DSA practice to be managed as an ongoing workflow instead of manually maintaining problems in spreadsheets or notes.
 
 ### 🐙 GitHub Integration
 
@@ -72,10 +75,11 @@ The application supports:
 - Branch selection
 - Pushing solutions
 - Organizing solutions by Topic and Pattern
+- Updating existing solution files
 
-Example:
+Example GitHub structure:
 
-```
+```text
 dsa-solutions/
 ├── Arrays/
 │   └── Two Pointers/
@@ -149,7 +153,7 @@ The backend also includes an in-memory repository as a fallback when MongoDB is 
 
 ## 🏗️ Architecture
 
-```
+```text
                          User
                           │
                           ▼
@@ -177,7 +181,7 @@ The backend also includes an in-memory repository as a fallback when MongoDB is 
 
 ## 📁 Project Structure
 
-```
+```text
 dsa-pattern-vault/
 │
 ├── client/
@@ -235,44 +239,44 @@ dsa-pattern-vault/
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
-```
+```bash
 git clone https://github.com/AishwaryaTS-cloud/dsa-vault.git
 cd dsa-vault
 ```
 
-### 2. Install backend dependencies
+### 2. Install Backend Dependencies
 
-```
+```bash
 cd server
 npm install
 ```
 
 Start the backend:
 
-```
+```bash
 npm run dev
 ```
 
 The backend runs on:
 
-```
+```text
 http://localhost:5000
 ```
 
-### 3. Install frontend dependencies
+### 3. Install Frontend Dependencies
 
 Open another terminal:
 
-```
+```bash
 cd client
 npm install
 ```
 
 Start the frontend:
 
-```
+```bash
 npm run dev
 ```
 
@@ -282,22 +286,24 @@ Vite will display the local frontend URL in the terminal.
 
 ## 🔑 Environment Variables
 
-Create a `.env` file in the project root.
+Create a `.env` file in the project root:
 
-```
+```env
 PORT=5000
 MONGODB_URI=your_mongodb_connection_string
 ```
 
-For the deployed frontend:
+For the deployed frontend, configure this environment variable in Vercel:
 
-```
+```env
 VITE_API_URL=https://dsa-vault-c7cd.onrender.com
 ```
 
+The frontend uses this variable to communicate with the deployed Express backend.
+
 Never commit the real `.env` file, database passwords, GitHub tokens, or other secrets to GitHub.
 
-Use `.env.example` to document required environment variables.
+Use `.env.example` to document the required environment variables.
 
 ---
 
@@ -305,7 +311,7 @@ Use `.env.example` to document required environment variables.
 
 ### Authentication
 
-```
+```text
 POST /api/auth/register
 POST /api/auth/login
 GET  /api/auth/me
@@ -313,7 +319,7 @@ GET  /api/auth/me
 
 ### Questions
 
-```
+```text
 GET    /api/questions
 POST   /api/questions
 PUT    /api/questions/:id
@@ -325,14 +331,14 @@ GET    /api/questions/topics-patterns
 
 ### GitHub
 
-```
+```text
 POST /api/github/verify
 POST /api/github/push/:id
 ```
 
-### Health
+### Health Check
 
-```
+```text
 GET /api/health
 ```
 
@@ -340,42 +346,48 @@ GET /api/health
 
 ## 🌍 Deployment
 
-The application is deployed using a separate frontend and backend.
+The application uses separate deployments for the frontend and backend.
 
 ### Frontend
 
-```
+```text
 Vercel
-↓
+   ↓
 React + Vite
-↓
+   ↓
 https://dsa-vault-gamma.vercel.app/
 ```
 
 ### Backend
 
-```
+```text
 Render
-↓
+   ↓
 Node.js + Express
-↓
+   ↓
 https://dsa-vault-c7cd.onrender.com/
 ```
 
 ### Database
 
-```
+```text
 MongoDB Atlas
-↓
+   ↓
 Mongoose
-↓
+   ↓
 Express Backend
 ```
 
-The frontend communicates with the backend through the production API URL:
+The production frontend communicates with the backend using:
 
-```
+```env
 VITE_API_URL=https://dsa-vault-c7cd.onrender.com
+```
+
+The API requests are sent to:
+
+```text
+https://dsa-vault-c7cd.onrender.com/api
 ```
 
 ---
@@ -384,10 +396,10 @@ VITE_API_URL=https://dsa-vault-c7cd.onrender.com
 
 The basic workflow is:
 
-```
+```text
 Register / Login
        ↓
-Dashboard
+   Dashboard
        ↓
 Add DSA Problem
        ↓
@@ -400,6 +412,44 @@ Track Solved / Revision Status
 Push Solution to GitHub
        ↓
 Revise Problems Later
+```
+
+---
+
+## 🗄️ Data Flow
+
+### Adding a Problem
+
+```text
+React Frontend
+      ↓
+POST /api/questions
+      ↓
+Express Route
+      ↓
+Repository
+      ↓
+MongoDB Atlas
+      ↓
+Response
+      ↓
+React UI
+```
+
+### Pushing a Solution to GitHub
+
+```text
+React Frontend
+      ↓
+POST /api/github/push/:id
+      ↓
+Express Backend
+      ↓
+GitHub Service
+      ↓
+GitHub REST API
+      ↓
+GitHub Repository
 ```
 
 ---
